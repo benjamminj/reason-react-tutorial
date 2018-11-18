@@ -1,0 +1,10 @@
+{
+  "name": "reason-react-tutorial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "bs-platform": "^4.0.7",
+    "parcel-bundler": "^1.10.3"
+  }
+}
