@@ -1,2 +1,8 @@
 # dependencies
 node_modules/
+
+# build
+src/**/*.bs.js
+lib/
+.cache/
+dist/
