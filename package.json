@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/index.html"
+    "dev": "parcel -p 8000 src/index.html"
   },
   "dependencies": {
     "bs-platform": "^4.0.7",
