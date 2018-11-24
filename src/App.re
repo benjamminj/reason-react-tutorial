@@ -7,48 +7,90 @@ type repository = {
 type state = {
   input: string,
   loading: bool,
+  results: list(repository),
 };
 
 type action =
   | UpdateInput(string)
+  | UpdateResults(list(repository))
   | Search;
 
 let component = ReasonReact.reducerComponent("App");
 
 module Api = {
   open Json.Decode;
+  module Promise = Js.Promise;
 
-  let decodeResults = field("items", array(json => {
-    name: field("name", string, json),
-    description: field("description", string, json),
-    href: field("html_url", string, json),
-  }));
-  
-  let getResults = query => 
-    Js.Promise.(
-      Fetch.fetch("https://api.github.com/search/repositories?q=" ++ query)
-      |> then_(Fetch.Response.json)
-      |> then_(json => {
-        Js.log(json);
-        resolve();
-      })
+  let decodeResults =
+    field(
+      "items",
+      list(
+        optional(json =>
+          {
+            name: field("name", string, json),
+            description: field("description", string, json),
+            href: field("html_url", string, json),
+          }
+        ),
+      ),
     );
-    
+
+  let getResults = query =>
+    /*
+     * This is similar to `open Json.Decode`, it allows the Promise functions
+     * to be available within the parentheses
+     */
+    Promise.(
+      Fetch.fetch("https://api.github.com/search/repositories?q=" ++ query)
+      |> Promise.then_(Fetch.Response.json)
+      |> Promise.then_(json => decodeResults(json) |> resolve)
+      |> Promise.then_(results =>
+           results
+           |> List.filter(optionalItem =>
+                switch (optionalItem) {
+                | Some(_) => true
+                | None => false
+                }
+              )
+           |> List.map(item =>
+                switch (item) {
+                | Some(item) => item
+                }
+              )
+           |> resolve
+         )
+    );
 };
+
+module Styles = {
+  open Css;
+
+  let list = style([
+    display(`flex),
+    flexWrap(`wrap),
+  ])
+}
 
 let make = _children => {
   ...component,
-  initialState: () => {input: "", loading: false},
+  initialState: () => {input: "", loading: false, results: []},
   reducer: (action, state) =>
     switch (action) {
     | UpdateInput(input) => ReasonReact.Update({...state, input})
+    | UpdateResults(results) =>
+      ReasonReact.Update({...state, loading: false, results})
     | Search =>
       ReasonReact.UpdateWithSideEffects(
         {...state, loading: true},
         (
           self => {
             let value = self.state.input;
-            let _promise = Api.getResults(value);
+            let _promise =
+              Api.getResults(value)
+              |> Js.Promise.then_(results => {
+                   self.send(UpdateResults(results));
+                   Js.Promise.resolve();
+                 });
             ();
           }
         ),
@@ -82,7 +124,13 @@ let make = _children => {
       <div>
         {
           self.state.loading ?
-            ReasonReact.string("Loading...") : ReasonReact.null
+            ReasonReact.string("Loading...") :
+            self.state.results
+            |> Array.of_list
+            |> Array.map(({name, href, description}) =>
+                 <Card key={name} name href description />
+               )
+            |> ReasonReact.array
         }
       </div>
     </div>,
