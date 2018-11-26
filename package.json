@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel -p 8000 src/index.html"
+    "dev": "parcel -p 8000 src/index.html",
+    "build": "parcel build src/index.html --public-url https://benjamminj.github.io/reason-react-tutorial/"
   },
   "dependencies": {
     "@glennsl/bs-json": "^3.0.0",
@@ -16,6 +17,7 @@
     "reason-react": "^0.5.3"
   },
   "devDependencies": {
-    "bsb-js": "^1.1.7"
+    "bsb-js": "^1.1.7",
+    "gh-pages": "^2.0.1"
   }
 }
