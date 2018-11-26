@@ -154,4 +154,4 @@ var o=require("process"),r=require("./caml_builtin_exceptions.js");function t(t)
 },{"bs-css/src/Css.js":"Wwxw","bs-platform/lib/js/list.js":"OANq","bs-platform/lib/js/array.js":"I9oO","bs-platform/lib/js/block.js":"OTT/","bs-platform/lib/js/curry.js":"Zxig","react":"1n8/","@glennsl/bs-json/src/Json_decode.bs.js":"SBd6","reason-react/src/ReasonReact.js":"9Wr5","bs-platform/lib/js/caml_builtin_exceptions.js":"lIqf","./Card.bs.js":"+1Y+"}],"U6vj":[function(require,module,exports) {
 "use strict";var e=require("reason-react/src/ReactDOMRe.js"),r=require("reason-react/src/ReasonReact.js"),s=require("./App.bs.js");e.renderToElementWithId(r.element(void 0,void 0,s.make([])),"app");
 },{"reason-react/src/ReactDOMRe.js":"VUZN","reason-react/src/ReasonReact.js":"9Wr5","./App.bs.js":"+k3g"}]},{},["U6vj"], null)
-//# sourceMappingURL=/Index.3e8345cf.map
+//# sourceMappingURL=https://benjamminj.github.io/reason-react-tutorial/Index.3e8345cf.map
